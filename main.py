@@ -33,6 +33,15 @@ def chatbot_text(prompt):
     if 'messages' not in session:
         session['messages'] = [{"role": "system", "content": system_setup},]
 
+    if 'conversation_cost' not in session:
+        session['conversation_cost'] = 0.0
+  
+    if 'total_prompts_cost' not in session:
+        session['total_prompts_cost'] = 0.0
+
+    if 'total_responses_cost' not in session:
+        session['total_responses_cost'] = 0.0
+
     # Add each new message to the list
     session["messages"] = session["messages"] + [{"role": "user", "content": prompt}]
 
@@ -45,7 +54,10 @@ def chatbot_text(prompt):
 
     prompt_tokens = completion.usage.prompt_tokens
     completion_tokens = completion.usage.completion_tokens
-    total_tokens = completion.usage.total_tokens
+
+    session['total_responses_cost'] += completion_tokens * 0.0015
+    session['total_prompts_cost'] += prompt_tokens * 0.0005
+    total_conversation_cost = session['total_responses_cost'] + session['total_prompts_cost']
 
     # Adding the response to the messages list
     session["messages"] = session["messages"] + [{"role": "assistant", "content": chat_message}]
@@ -53,10 +65,12 @@ def chatbot_text(prompt):
     print("\nHere you have the session:\n\n", session["messages"])
 
     returned_dict = {
-        "prompt_tokens": prompt_tokens,
-        "completion tokens": completion_tokens,
-        "Total tokens": total_tokens,
-        "chat response": chat_message,
+        "1-Chat response": chat_message,
+        "2-Current_prompt_tokens": prompt_tokens,
+        "3-Current_completion tokens": completion_tokens,
+        "4-Total_prompts_cost": str(session['total_prompts_cost'])+"$",
+        "5-Total_responses_cost" : str(session['total_responses_cost'])+"$",
+        "6-All_conversation_cost": str(total_conversation_cost)+"$",
     }
 
     return returned_dict
