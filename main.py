@@ -29,27 +29,37 @@ def encode_image(image_path):
 
 #----------------------------------------------------------------------------------------------------
 def chatbot_text(prompt):
-    system_setup = "You're content creator inside TopDoctors. When you're asked to write an article response with around 700 words"
+    system_setup = "You're an AI assistant at TopDoctors. When you're asked to write a text, a paragraph or an article reply with an article of around 700 words."
     if 'messages' not in session:
-        session['messages'] = [
-        {"role": "system", "content": system_setup},
-    ]
+        session['messages'] = [{"role": "system", "content": system_setup},]
+
     # Add each new message to the list
-    session["messages"].append({"role": "user", "content": prompt})
+    session["messages"] = session["messages"] + [{"role": "user", "content": prompt}]
 
     completion = client.chat.completions.create(
     model = model_engine,
     messages = session["messages"])
-    print("completion: ",completion)
-
+  
     # Getting the generated response
     chat_message = completion.choices[0].message.content
 
-    # Adding the response to the messages list
-    session["messages"].append({"role": "assistant", "content": chat_message})
-    print("Here you have the session: ", session["messages"])
+    prompt_tokens = completion.usage.prompt_tokens
+    completion_tokens = completion.usage.completion_tokens
+    total_tokens = completion.usage.total_tokens
 
-    return chat_message
+    # Adding the response to the messages list
+    session["messages"] = session["messages"] + [{"role": "assistant", "content": chat_message}]
+
+    print("\nHere you have the session:\n\n", session["messages"])
+
+    returned_dict = {
+        "prompt_tokens": prompt_tokens,
+        "completion tokens": completion_tokens,
+        "Total tokens": total_tokens,
+        "chat response": chat_message,
+    }
+
+    return returned_dict
 
 
 #----------------------------------------------------------------------------------------------------
