@@ -5,9 +5,11 @@ import requests
 import os
 
 from flask import Flask, request, session, jsonify
+from flask_session import Session
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+Session(app)
 
 OPENAI_API_KEY = "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"
 
