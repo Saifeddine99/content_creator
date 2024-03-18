@@ -9,7 +9,6 @@ from flask_session import Session
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
-Session(app)
 
 from dotenv import load_dotenv
 
@@ -17,8 +16,9 @@ from dotenv import load_dotenv
 load_dotenv()
 # Retrieve the encryption key from the environment variable
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
-
 client = OpenAI(api_key=OPENAI_API_KEY)
+app.config['SESSION_TYPE'] = 'filesystem'
+Session(app)
 
 #----------------------------------------------------------------------------------------------------
 system_setup = "You're an AI assistant at TopDoctors. When you're asked to write a text, a paragraph or an article reply with an article of around 700 words."
