@@ -5,15 +5,20 @@ import requests
 import os
 
 from flask import Flask, request, session, jsonify
+import logging
+from flask_session import Session
+
+logging.basicConfig(filename='app.log', level=logging.INFO, format='%(asctime)s %(levelname)s [%(filename)s:%(lineno)d] - %(message)s')
+
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
-
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = ""
 
 model_engine = "gpt-3.5-turbo"
 client = OpenAI(api_key=OPENAI_API_KEY)
-
+app.config['SESSION_TYPE'] = 'filesystem'
+Session(app)
 #----------------------------------------------------------------------------------------------------
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
@@ -126,6 +131,7 @@ def get_response():
     if not files :
         generated_response = chatbot_text(prompt)
         
+        
     else:
         paths_list = []
         for index, file in enumerate(files):
@@ -140,8 +146,7 @@ def get_response():
 
         generated_response = chatbot_image(paths_list, prompt)
 
-    return jsonify(generated_response), 201
+    logging.info(generated_response["1-Chat response"][:100])
+    return generated_response,200
     
 #------------------------------------------------------------------------------------------------------------
-if __name__ == "__main__":
-    app.run(debug=True)
