@@ -1,0 +1,58 @@
+body {
+    background: lightgray;
+    font-family: 'Poppins', sans-serif;
+  }
+  .container {
+    max-width: 540px;
+  }
+  #chat-wrapper {
+    min-height: 400px;
+    max-height: 400px;
+    overflow: auto;
+  }
+  input {
+    outline: none;
+  }
+  .close-button {
+    opacity: 0.4;
+    transition: opacity 600ms ease;
+    cursor: pointer;
+  }
+  .close-button:hover {
+    opacity: 1;
+  }
+  #chat-container {
+    position: fixed;
+    bottom: 40px;
+    right: 50%;
+    transform: translate(50%);
+    display: none;
+  }
+  .ol-viewport {
+    border-radius: 40px;
+  }
+  
+  /* SCROLLBAR::width */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* SCROLLBAR::Track */
+  ::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.25);
+  }
+  
+  /* SCROLLBAR::Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.5); 
+  }
+  
+  /* SCROLLBAR::Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0,0,0,0.65); 
+  }
+  
+  .funky {
+    border: 2px solid orange !important;
+  }
+

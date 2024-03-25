@@ -1,1 +1,4 @@
 project_env/
+flask_session/
+.env
+venv/
