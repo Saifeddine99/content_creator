@@ -16,7 +16,10 @@ app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 
-model_engine = "gpt-3.5-turbo"
+# Load environment variables from .env file
+load_dotenv()
+# Retrieve the encryption key from the environment variable
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 client = OpenAI(api_key=OPENAI_API_KEY)
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
