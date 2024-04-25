@@ -37,11 +37,15 @@ def encode_image(image_path):
 
 #----------------------------------------------------------------------------------------------------
 def chatbot_text(prompt):
+
+    input_1token_cost = 0.01 / 1000
+    output_1token_cost = 0.03 / 1000
+
     # Add each new message to the list
     session["messages"] = session["messages"] + [{"role": "user", "content": prompt}]
 
     completion = client.chat.completions.create(
-    model = "gpt-3.5-turbo",
+    model = "gpt-4-turbo",
     messages = session["messages"])
   
     # Getting the generated response
@@ -52,14 +56,15 @@ def chatbot_text(prompt):
     prompt_tokens = completion.usage.prompt_tokens
     completion_tokens = completion.usage.completion_tokens
 
-    session['total_responses_cost'] += completion_tokens * 0.0015 / 1000
-    session['total_prompts_cost'] += prompt_tokens * 0.0005 / 1000
+    session['total_prompts_cost'] += prompt_tokens * input_1token_cost
+    session['total_responses_cost'] += completion_tokens * output_1token_cost
+
     total_conversation_cost = session['total_responses_cost'] + session['total_prompts_cost']
 
     # Adding the response to the messages list
     session["messages"] = session["messages"] + [{"role": "assistant", "content": chat_message}]
 
-    print("\nHere you have the session:\n\n", session["messages"])
+    #print("\nHere you have the session:\n\n", session["messages"])
 
     returned_dict = {
         "1-Chat response": chat_message,
